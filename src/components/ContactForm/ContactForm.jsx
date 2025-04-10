@@ -1,15 +1,20 @@
 import s from "./ContactForm.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { nanoid } from "nanoid";
 import * as Yup from "yup";
+import { addContact } from "../../redux/contactsSlice";
+import { useDispatch } from "react-redux";
 
-const ContactForm = ({ addContacts }) => {
+const ContactForm = () => {
   const initialValues = {
     name: "",
     number: "",
   };
-  const handleSubmit = (values, action) => {
-    addContacts(values);
-    action.resetForm();
+  const dispatch = useDispatch();
+
+  const hadleSubmit = (values, { resetForm }) => {
+    dispatch(addContact({ ...values, id: nanoid() }));
+    resetForm();
   };
   const patternLetters = /^[a-zA-Zа-яА-ЯёЁ]+$/;
   const patternPhone = /^\d{3}-\d{2}-\d{2}$/;
@@ -30,18 +35,28 @@ const ContactForm = ({ addContacts }) => {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={handleSubmit}
+      onSubmit={hadleSubmit}
       validationSchema={ContactSchema}
     >
       <Form className={s.form}>
         <label className={s.inputBox}>
           Name
-          <Field className={s.formField} type="text" name="name"></Field>
+          <Field
+            className={s.formField}
+            type="text"
+            name="name"
+            id="name"
+          ></Field>
           <ErrorMessage name="name" component="p" className={s.error} />
         </label>
         <label className={s.inputBox}>
           Number
-          <Field className={s.formField} type="text" name="number"></Field>
+          <Field
+            className={s.formField}
+            type="text"
+            name="number"
+            id="number"
+          ></Field>
           <ErrorMessage name="number" component="p" className={s.error} />
         </label>
         <button className={s.formBtn} type="submit">
