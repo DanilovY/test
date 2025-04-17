@@ -1,8 +1,7 @@
 import s from "./ContactForm.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { nanoid } from "nanoid";
 import * as Yup from "yup";
-import { addContact } from "../../redux/contactsSlice";
+import { addContact } from "../../redux/contactsOps";
 import { useDispatch } from "react-redux";
 
 const ContactForm = () => {
@@ -13,7 +12,7 @@ const ContactForm = () => {
   const dispatch = useDispatch();
 
   const hadleSubmit = (values, { resetForm }) => {
-    dispatch(addContact({ ...values, id: nanoid() }));
+    dispatch(addContact(values));
     resetForm();
   };
   const patternLetters = /^[a-zA-Zа-яА-ЯёЁ]+$/;
